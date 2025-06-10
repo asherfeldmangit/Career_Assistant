@@ -1,3 +1,8 @@
+"""
+evaluator.py - Evaluation context and prompt setup for Career_Assistant
+
+This module loads context from PDF and summary files, and prepares the system prompt for the evaluator LLM that checks the quality of agent responses.
+"""
 from pydantic import BaseModel
 from pypdf import PdfReader
 
@@ -13,6 +18,13 @@ with open("context/asher_summary.txt", "r", encoding="utf-8") as f:
     summary = f.read()
 
 class Evaluation(BaseModel):
+    """
+    Data model for evaluation results.
+
+    Attributes:
+        is_acceptable (bool): Whether the agent's response is acceptable.
+        feedback (str): Feedback or reason for rejection.
+    """
     is_acceptable: bool
     feedback: str
 

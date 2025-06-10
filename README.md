@@ -1,3 +1,7 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![Last Commit](https://img.shields.io/github/last-commit/asherfeldman/Career_Assistant?style=flat)](https://github.com/asherfeldman/Career_Assistant/commits/main)
+
 # Career_Assistant
 
 Career_Assistant is an interactive web-based agent designed to answer questions about Asher Feldman's professional history, skills, and experience. It leverages large language models (LLMs) to provide engaging, professional, and contextually accurate responses, acting as a digital representative for Asher Feldman.
@@ -39,3 +43,31 @@ Career_Assistant is an interactive web-based agent designed to answer questions 
    python Assisstant/main.py
    ```
 4. Interact with the assistant via the Gradio web interface.
+
+## Documentation
+
+### Module Structure
+
+- **Assisstant/main.py**: Main entry point. Loads context, sets up system prompts, defines the chat logic, evaluation, and retry mechanism, and launches the Gradio interface.
+- **Assisstant/evaluator.py**: Contains the evaluation context and the `Evaluation` data model used for quality control.
+
+### Main Classes and Functions
+
+- **Evaluation (class)**: Pydantic model representing the result of a response evaluation (`is_acceptable`, `feedback`).
+- **evaluator_user_prompt(reply, message, history)**: Formats the conversation and latest exchange for the evaluator model.
+- **evaluate(reply, message, history)**: Uses the evaluator LLM to check if a response is acceptable.
+- **rerun(reply, message, history, feedback)**: Retries generating a response if the previous one was rejected, incorporating feedback.
+- **chat(message, history)**: Main chat handler. Generates a reply, evaluates it, and retries if necessary.
+
+### Gradio Interface Example
+
+When you run the project, a Gradio web interface will launch in your browser. You can interact with the assistant by sending messages. The assistant will:
+
+- Generate a response using the main LLM.
+- Evaluate the response for quality.
+- Retry if the response is not acceptable.
+- Return the final, approved response to you.
+
+---
+
+For further details, see the docstrings in the source code.
