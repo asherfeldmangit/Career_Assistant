@@ -7,18 +7,25 @@ from pypdf import PdfReader
 from pydantic import BaseModel
 import gradio as gr
 import json
+from pathlib import Path
 
 load_dotenv(override=True)
 openai = OpenAI()
 
-reader = PdfReader("context/asher.pdf")
+ROOT = Path(__file__).resolve().parent
+
+# PDF and summary files are now located at the project root after the recent refactor.
+pdf_path = ROOT / "asher.pdf"
+summary_path = ROOT / "asher_summary.txt"
+
+reader = PdfReader(str(pdf_path))
 linkedin = ""
 for page in reader.pages:
     text = page.extract_text()
     if text:
         linkedin += text
 
-with open("context/asher_summary.txt", "r", encoding="utf-8") as f:
+with open(summary_path, "r", encoding="utf-8") as f:
     summary = f.read()
 
 name = "Asher Feldman"
@@ -128,7 +135,6 @@ def chat(message, history):
 Gradio web UI wrapper around the `chat` function.
 """
 
-# Allow running this script as a standalone module, e.g. ``python -m Assisstant``
 def main() -> None:
     """Launch the Gradio Career Assistant interface."""
     initial_message = f"Hello! I'm {name}'s digital representative. How can I assist you today?"
@@ -138,7 +144,6 @@ def main() -> None:
     gr.ChatInterface(chat, chatbot=chatbot, type="messages", css=css).launch(share=True, inbrowser=True)
 
 
-# When this file is executed directly (`python Assisstant/main.py`) or the package is run
-# as a module (`python -m Assisstant`), invoke the main entrypoint.
+# When this file is executed directly (e.g. ``python app.py``), invoke the main entrypoint.
 if __name__ == "__main__":
-    main()
+    main() 

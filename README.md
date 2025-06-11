@@ -1,3 +1,9 @@
+---
+title: Career_Assistant
+app_file: app.py
+sdk: gradio
+sdk_version: 4.44.1
+---
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Last Commit](https://img.shields.io/github/last-commit/asherfeldman/Career_Assistant?style=flat)](https://github.com/asherfeldman/Career_Assistant/commits/main)
@@ -20,8 +26,8 @@ Career_Assistant is an interactive web-based agent designed to answer questions 
 
 ## Data Sources
 
-- `context/asher.pdf`: The full LinkedIn profile of Asher Feldman, used to provide detailed background information.
-- `context/asher_summary.txt`: A concise summary of Asher Feldman's professional experience.
+- `asher.pdf`: The full LinkedIn profile of Asher Feldman, used to provide detailed background information.
+- `asher_summary.txt`: A concise summary of Asher Feldman's professional experience.
 
 ## Tech Stack
 
@@ -37,10 +43,10 @@ Career_Assistant is an interactive web-based agent designed to answer questions 
    ```
    pip install -r requirements.txt
    ```
-2. Ensure you have the required context files in the `context/` directory.
+2. Ensure `asher.pdf` and `asher_summary.txt` are located in the project root (same directory as `app.py`).
 3. Run the assistant:
    ```
-   python Assisstant/main.py
+   python app.py
    ```
 4. Interact with the assistant via the Gradio web interface.
 
@@ -48,8 +54,8 @@ Career_Assistant is an interactive web-based agent designed to answer questions 
 
 ### Module Structure
 
-- **Assisstant/main.py**: Main entry point. Loads context, sets up system prompts, defines the chat logic, evaluation, and retry mechanism, and launches the Gradio interface.
-- **Assisstant/evaluator.py**: Contains the evaluation context and the `Evaluation` data model used for quality control.
+- **app.py**: Main entry point. Loads context, sets up system prompts, defines the chat logic, evaluation, and retry mechanism, and launches the Gradio interface.
+- **evaluator.py**: Contains the evaluation context and the `Evaluation` data model used for quality control.
 
 ### Main Classes and Functions
 
