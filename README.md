@@ -4,76 +4,134 @@ app_file: app.py
 sdk: gradio
 sdk_version: 4.44.1
 ---
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![Last Commit](https://img.shields.io/github/last-commit/asherfeldman/Career_Assistant?style=flat)](https://github.com/asherfeldman/Career_Assistant/commits/main)
 
-# Career_Assistant
+<p align="center">
+  <img src="https://raw.githubusercontent.com/asherfeldman/Career_Assistant/main/.github/assets/banner.png" alt="Career Assistant Banner" />
+</p>
 
-Career_Assistant is an interactive web-based agent designed to answer questions about Asher Feldman's professional history, skills, and experience. It leverages large language models (LLMs) to provide engaging, professional, and contextually accurate responses, acting as a digital representative for Asher Feldman.
+<p align="center">
+  <a href="https://huggingface.co/spaces/asherfeldman/Career_Assistant"><img alt="HuggingFace Spaces" src="https://img.shields.io/badge/Live%20Demo-HuggingFace-darkviolet?logo=huggingface&logoColor=white"></a>
+  <a href="https://github.com/asherfeldman/Career_Assistant/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+  <a href="https://www.python.org/downloads/"><img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue.svg"></a>
+  <a href="https://github.com/asherfeldman/Career_Assistant/actions"><img alt="CI" src="https://github.com/asherfeldman/Career_Assistant/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/asherfeldman/Career_Assistant/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/asherfeldman/Career_Assistant?style=flat"></a>
+  <a href="https://github.com/asherfeldman/Career_Assistant/issues"><img alt="Issues" src="https://img.shields.io/github/issues/asherfeldman/Career_Assistant?color=important"></a>
+  <a href="https://github.com/asherfeldman/Career_Assistant/pulls"><img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/asherfeldman/Career_Assistant?color=success"></a>
+</p>
 
-## Features
+<h1 align="center">Career Assistant 👩‍💼👨‍💼</h1>
 
-- **Conversational Agent:** Answers questions about Asher Feldman's career, background, and skills, using information extracted from a LinkedIn profile PDF and a curated summary.
-- **Contextual Awareness:** The assistant is primed with both a detailed summary and the full LinkedIn profile text to ensure responses are relevant and accurate.
-- **Quality Control:** Each response is automatically evaluated for quality and professionalism by a separate evaluator model before being returned to the user. If a response is deemed unacceptable, the agent will automatically retry with feedback.
-- **Fun Easter Egg:** If a user asks about patents, the assistant will reply entirely in Pig Latin.
+Career Assistant is an interactive LLM-powered web app that answers questions about **Asher Feldman's** professional experience. Think of it as a conversational, always-on digital résumé: it converts Asher's LinkedIn profile and summary into a chat-friendly interface with built-in quality control to keep answers accurate, concise, and professional.
 
-## Models Used
+## ✨ Demo
 
-- **Main Conversational Model:** Uses OpenAI's `gpt-4o-mini` model to generate responses to user questions, ensuring high-quality, context-aware answers.
-- **Evaluation Model:** Uses OpenAI's `o3-mini` model to critically assess the quality of each response, providing structured feedback and enforcing a high standard of professionalism and engagement.
+👉 **Try it out now:** [https://huggingface.co/spaces/asherfeldman/Career_Assistant](https://huggingface.co/spaces/asherfeldman/Career_Assistant)
 
-## Data Sources
+## 📜 Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Quick Start](#quick-start)
+- [How It Works](#how-it-works)
+- [Project Structure](#project-structure)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
-- `asher.pdf`: The full LinkedIn profile of Asher Feldman, used to provide detailed background information.
-- `asher_summary.txt`: A concise summary of Asher Feldman's professional experience.
+## 🚀 Features
+- **Conversational Q&A** – Ask anything about Asher's background, skills, or projects.
+- **Contextual Awareness** – Primed with a PDF export of the LinkedIn profile *and* a hand-curated summary.
+- **Automated Quality Gate** – Every LLM response is reviewed by a second, lightweight model; sub-par answers are automatically rewritten.
+- **Pig Latin Easter Egg** – Mention "patents" to see what happens. 🐷
+- **Modern UI** – Built with Gradio 4 for a clean, responsive interface.
 
-## Tech Stack
+## 🛠 Tech Stack
+- 🐍 Python 3.10+
+- 🤗 [Gradio](https://gradio.app/) 4.44 for the web front-end
+- 🦜🔗 OpenAI GPT-4o-mini for generation, O3-mini for evaluation
+- 📄 pypdf for parsing the LinkedIn PDF
+- 🔑 python-dotenv for environment management  
 
-- **Python** with the following libraries:
-  - `openai` for LLM access
-  - `pypdf` for PDF parsing
-  - `gradio` for the web interface
-  - `python-dotenv` for environment variable management
+All dependencies are pinned in [`requirements.txt`](requirements.txt).
 
-## Usage
+## ⚡️ Quick Start
 
-1. Install dependencies:
-   ```
+1. **Clone & install**
+
+   ```bash
+   git clone https://github.com/asherfeldman/Career_Assistant.git
+   cd Career_Assistant
    pip install -r requirements.txt
    ```
-2. Ensure `asher.pdf` and `asher_summary.txt` are located in the project root (same directory as `app.py`).
-3. Run the assistant:
+
+2. **Add your API keys**
+
+   ```bash
+   cp .env.example .env
+   # then edit .env and set OPENAI_API_KEY=...
    ```
+
+3. **Run locally**
+
+   ```bash
    python app.py
    ```
-4. Interact with the assistant via the Gradio web interface.
 
-## Documentation
+4. Open your browser at the printed URL (defaults to `http://localhost:7860`) and start chatting!
 
-### Module Structure
+> **Docker user?**  
+> Simply run:  
+> `docker compose up --build`
 
-- **app.py**: Main entry point. Loads context, sets up system prompts, defines the chat logic, evaluation, and retry mechanism, and launches the Gradio interface.
-- **evaluator.py**: Contains the evaluation context and the `Evaluation` data model used for quality control.
+## 🧠 How It Works
 
-### Main Classes and Functions
+```mermaid
+flowchart TD
+    A[User Question] --> B{Chat LLM (GPT-4o-mini)}
+    B --> C[Draft Answer]
+    C --> D{Evaluator LLM (O3-mini)}
+    D -- Acceptable --> E[Show Answer]
+    D -- Needs Fix --> F[Rewrite Prompt With Feedback]
+    F --> B
+```
 
-- **Evaluation (class)**: Pydantic model representing the result of a response evaluation (`is_acceptable`, `feedback`).
-- **evaluator_user_prompt(reply, message, history)**: Formats the conversation and latest exchange for the evaluator model.
-- **evaluate(reply, message, history)**: Uses the evaluator LLM to check if a response is acceptable.
-- **rerun(reply, message, history, feedback)**: Retries generating a response if the previous one was rejected, incorporating feedback.
-- **chat(message, history)**: Main chat handler. Generates a reply, evaluates it, and retries if necessary.
+1. A user sends a question.
+2. The main LLM generates a draft answer using both the PDF and summary as system context.
+3. The evaluator model scores the reply for accuracy, professionalism, and engagement.
+4. If the score is low, feedback is injected and the response is regenerated; else it is returned.
 
-### Gradio Interface Example
+## 📁 Project Structure
 
-When you run the project, a Gradio web interface will launch in your browser. You can interact with the assistant by sending messages. The assistant will:
+```
+Career_Assistant/
+├── app.py           # Main Gradio app & chat logic
+├── evaluator.py     # Evaluation datamodel & helper functions
+├── asher.pdf        # Full LinkedIn profile
+├── asher_summary.txt# 14-line summary of experience
+├── requirements.txt # Pinned dependencies
+└── README.md
+```
 
-- Generate a response using the main LLM.
-- Evaluate the response for quality.
-- Retry if the response is not acceptable.
-- Return the final, approved response to you.
+## 🗺 Roadmap
+- [ ] Add vector-store retrieval for even deeper context.
+- [ ] Multi-modal support (embed project screenshots & PDFs).
+- [ ] CI/CD to auto-deploy to HuggingFace on push to `main`.
+
+## 🤝 Contributing
+Contributions are welcome! Please open an [issue](https://github.com/asherfeldman/Career_Assistant/issues) or start a [discussion](https://github.com/asherfeldman/Career_Assistant/discussions).
+
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feat/awesome‐feature`)
+3. Commit your changes (`git commit -m 'feat: add awesome feature'`)
+4. Push to the branch (`git push origin feat/awesome‐feature`)
+5. Open a pull request
+
+Please follow the [Conventional Commits](https://www.conventionalcommits.org/) spec and run `pre-commit` before pushing.
+
+## 🪪 License
+Released under the [MIT License](LICENSE).
 
 ---
 
-For further details, see the docstrings in the source code.
+<p align="center">
+Made with ❤️ and lots of coffee by <a href="https://www.linkedin.com/in/asherfeldman/">Asher Feldman</a>
+</p>
