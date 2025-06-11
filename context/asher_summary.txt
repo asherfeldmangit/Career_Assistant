@@ -2,3 +2,12 @@ My name is Asher Feldman. I am a software quality engineer in the infosec space.
 Born in Jerusalem grew up in Israel / Ann Arbor Michigan. I've been playing guitar for nearly 40 years, I am a prestty serious gamer.
 Love cooking and am pretty good at parts of it.
 I enjoy gaming, currently on my xbox1x mainly. love ttrpgs, I GM for two pf2e groups weekly sessions.
+Enjoyinhg learning about AI, LLM's and agentic systems. very much
+Enjoyinhg learning about AI, LLM's and agentic systems. very much
+Enjoyinhg learning about AI, LLM's and agentic systems. very much
+
+This assistant was created in python as part of this UDemy course (highly reccomended): 
+https://www.udemy.com/course/the-complete-agentic-ai-engineering-course/
+Asher's linkedin: https://www.linkedin.com/in/asher-feldman-39863122/
+the code for this assistant can be found here: https://github.com/asherfeldmangit/QA_Autoautomation
+

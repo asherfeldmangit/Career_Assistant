@@ -1,7 +1,5 @@
 """
-main.py - Interactive digital representative for Asher Feldman
-
-This module loads context from PDF and summary files, sets up system prompts, and provides a Gradio web interface for users to interact with an LLM-based agent. The agent answers questions about Asher Feldman's career, with automatic evaluation and retry logic for quality control.
+Gradio-powered chat agent for Asher Feldman. Loads profile context, builds prompts, and serves an auto-evaluated chat UI.
 """
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -66,17 +64,7 @@ evaluator_system_prompt += f"\n\n## Summary:\n{summary}\n\n## LinkedIn Profile:\
 evaluator_system_prompt += f"With this context, please evaluate the latest response, replying with whether the response is acceptable and your feedback."
 
 def evaluator_user_prompt(reply, message, history):
-    """
-    Constructs the user prompt for the evaluator model, summarizing the conversation and the latest exchange.
-
-    Args:
-        reply (str): The agent's latest reply.
-        message (str): The user's latest message.
-        history (list): The conversation history as a list of dicts.
-
-    Returns:
-        str: The formatted prompt for the evaluator model.
-    """
+    """Create a compact summary prompt for the evaluator LLM."""
     user_prompt = f"Here's the conversation between the User and the Agent: \n\n{history}\n\n"
     user_prompt += f"Here's the latest message from the User: \n\n{message}\n\n"
     user_prompt += f"Here's the latest response from the Agent: \n\n{reply}\n\n"
@@ -84,17 +72,7 @@ def evaluator_user_prompt(reply, message, history):
     return user_prompt
 
 def evaluate(reply, message, history) -> Evaluation:
-    """
-    Evaluates the agent's reply using the evaluator LLM.
-
-    Args:
-        reply (str): The agent's reply to evaluate.
-        message (str): The user's message.
-        history (list): The conversation history.
-
-    Returns:
-        Evaluation: The evaluation result, including acceptability and feedback.
-    """
+    """Run the evaluator LLM and return an Evaluation verdict."""
     messages = [
         {"role": "system", "content": evaluator_system_prompt},
         {"role": "user", "content": evaluator_user_prompt(reply, message, history) + "\n\nReply in the following JSON format: {\"is_acceptable\": true/false, \"feedback\": \"...\"}"}
@@ -111,25 +89,12 @@ def evaluate(reply, message, history) -> Evaluation:
         return Evaluation(is_acceptable=False, feedback=f"Failed to parse model output: {content}\nError: {e}")
 
 messages = [{"role": "system", "content": system_prompt}] + [{"role": "user", "content": "do you hold a patent?"}]
-response = openai.chat.completions.create(model="gpt-4o-mini", messages=messages)
-reply = response.choices[0].message.content
+# response = openai.chat.completions.create(model="gpt-4o-mini", messages=messages)
+# reply = response.choices[0].message.content
 
 
 def rerun(reply, message, history, feedback):
-    """
-    Retries generating a reply if the previous one was rejected by the evaluator, incorporating feedback and context.
-
-    This function updates the system prompt to include the previous (rejected) answer and the evaluator's feedback, then re-asks the LLM to generate a new reply. This helps the agent learn from its mistakes and produce a higher-quality response.
-
-    Args:
-        reply (str): The previous agent reply that was rejected.
-        message (str): The user's message.
-        history (list): The conversation history.
-        feedback (str): Feedback from the evaluator explaining why the previous reply was rejected.
-
-    Returns:
-        str: The new agent reply, generated with the additional context and feedback.
-    """
+    """Produce a revised reply using the rejected answer and evaluator feedback."""
     updated_system_prompt = system_prompt + f"\n\n## Previous answer rejected\nYou just tried to reply, but the quality control rejected your reply\n"
     updated_system_prompt += f"## Your attempted answer:\n{reply}\n\n"
     updated_system_prompt += f"## Reason for rejection:\n{feedback}\n\n"
@@ -138,16 +103,7 @@ def rerun(reply, message, history, feedback):
     return response.choices[0].message.content
 
 def chat(message, history):
-    """
-    Handles a chat interaction: generates a reply, evaluates it, and retries if necessary.
-
-    Args:
-        message (str): The user's message.
-        history (list): The conversation history.
-
-    Returns:
-        str: The agent's final reply (after passing evaluation).
-    """
+    """Generate a reply, evaluate it, and retry until it passes QC."""
     if "patent" in message:
         system = system_prompt + "\n\nEverything in your reply needs to be in pig latin - \
               it is mandatory that you respond only and entirely in pig latin"
@@ -169,13 +125,29 @@ def chat(message, history):
 
 # --- Gradio Interface ---
 """
-Launches the Gradio web interface for the Career Assistant.
-
-This interface allows users to interact with the digital representative in a chat format. The chat function handles message processing, evaluation, and retries, ensuring only high-quality responses are shown to the user. The interface uses custom CSS for improved readability and style.
-
-- To use: Run this script and follow the link to the Gradio web UI in your browser.
-- The chat history is preserved for each session.
-- The interface is launched with sharing enabled and opens in the browser automatically.
+Gradio web UI wrapper around the `chat` function.
 """
-gr.ChatInterface(chat, type="messages", css=css).launch(share=True, inbrowser=True)
+# The lines above demonstrate a one-off example call to the model but are not required for the
+# application itself, so we comment them out to avoid unnecessary API usage when the package
+# is imported. Alternatively, you can remove them entirely.
 
+#
+# initial_message = f"Hello! I'm {name}'s digital representative. How can I assist you today?"
+# chatbot = gr.Chatbot(value=[{"role": "assistant", "content": initial_message}], type="messages")
+#
+# gr.ChatInterface(chat, chatbot=chatbot, type="messages", css=css).launch(share=True, inbrowser=True)
+
+# Allow running this script as a standalone module, e.g. ``python -m Assisstant``
+def main() -> None:
+    """Launch the Gradio Career Assistant interface."""
+    initial_message = f"Hello! I'm {name}'s digital representative. How can I assist you today?"
+    chatbot = gr.Chatbot(value=[{"role": "assistant", "content": initial_message}], type="messages")
+
+    # Launch the chat interface
+    gr.ChatInterface(chat, chatbot=chatbot, type="messages", css=css).launch(share=True, inbrowser=True)
+
+
+# When this file is executed directly (`python Assisstant/main.py`) or the package is run
+# as a module (`python -m Assisstant`), invoke the main entrypoint.
+if __name__ == "__main__":
+    main()
