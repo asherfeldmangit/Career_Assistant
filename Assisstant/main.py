@@ -127,15 +127,6 @@ def chat(message, history):
 """
 Gradio web UI wrapper around the `chat` function.
 """
-# The lines above demonstrate a one-off example call to the model but are not required for the
-# application itself, so we comment them out to avoid unnecessary API usage when the package
-# is imported. Alternatively, you can remove them entirely.
-
-#
-# initial_message = f"Hello! I'm {name}'s digital representative. How can I assist you today?"
-# chatbot = gr.Chatbot(value=[{"role": "assistant", "content": initial_message}], type="messages")
-#
-# gr.ChatInterface(chat, chatbot=chatbot, type="messages", css=css).launch(share=True, inbrowser=True)
 
 # Allow running this script as a standalone module, e.g. ``python -m Assisstant``
 def main() -> None:
